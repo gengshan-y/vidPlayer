@@ -14,7 +14,7 @@ using namespace cv;
 int main(int argc, char* argv[]) {
     /* Basic info */
     if (argc != 3) {
-        cout << "vidPlayer input-vid-path" << endl;
+        cout << "vidPlayer input-vid-path down-scale-factor" << endl;
         exit(-1);
     }
     cout << "OpenCV version " << CV_VERSION << endl;
