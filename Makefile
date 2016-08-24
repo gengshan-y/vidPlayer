@@ -4,10 +4,13 @@ CXXFLAGS=-std=c++0x -gdwarf-3 -Wall `pkg-config opencv --cflags`
 
 LDFLAGS=-g  `pkg-config opencv --libs`
 
-all: clean vidPlayer
+all: clean vidPlayer mv
 
 vidPlayer:
 	${CC} -o vidPlayer vidPlayer.cpp ${CXXFLAGS} ${LDFLAGS}
 
 clean: 
 	rm -f vidPlayer *.o
+
+mv: 
+	mv vidPlayer /home/gengshan/bin/
