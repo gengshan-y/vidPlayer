@@ -13,8 +13,9 @@ using namespace cv;
 
 int main(int argc, char* argv[]) {
     /* Basic info */
-    if (argc != 3) {
-        cout << "vidPlayer input-vid-path down-scale-factor" << endl;
+    if (argc != 4) {
+        cout << "vidPlayer input-vid-path scale-up-factor"
+             << " speed-up-factor" << endl;
         exit(-1);
     }
     cout << "OpenCV version " << CV_VERSION << endl;
@@ -23,7 +24,8 @@ int main(int argc, char* argv[]) {
     Mat frame;  // to store video frames
     unsigned int count = 0;
     char countStr [50];
-    unsigned int scaleFactor = stoi(argv[2]);
+    double scaleFactor = stod(argv[2]);
+    double speedFactor = stod(argv[3]);
 
     /* Read video information */
     VideoCapture targetVid(argv[1]);
@@ -45,13 +47,15 @@ int main(int argc, char* argv[]) {
         }
 
         /* basic process */
-        resize(frame, frame, Size(frameWid/scaleFactor, frameHgt/scaleFactor));
+        resize(frame, frame, Size(frameWid * scaleFactor, 
+                                  frameHgt * scaleFactor));
     
         /* display */     
         sprintf(countStr, "%04d", count);  // padding with zeros
         cout << "frame\t" << countStr << "/" << totalFrame << endl;
         imshow("vid", frame);
-        char key = (char)waitKey(1/vidFPS*1000);  // adjust wait time wrt. FPS
+        char key = (char)waitKey(1/vidFPS *  // adjust wait time wrt. FPS
+                                     1000 / speedFactor);
         switch (key) {
         case 'q':
         case 'Q':
