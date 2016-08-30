@@ -12,13 +12,12 @@ using namespace std;
 using namespace cv;
 
 int main(int argc, char* argv[]) {
-    /* Basic info */
-    if (argc != 4) {
+    /* Basic checking */
+    if (argc != 5) {
         cout << "vidPlayer input-vid-path scale-up-factor"
-             << " speed-up-factor" << endl;
+             << " speed-up-factor parse-to-image[y/n]" << endl;
         exit(-1);
     }
-    cout << "OpenCV version " << CV_VERSION << endl;
 
     /* Initialization */
     Mat frame;  // to store video frames
@@ -26,7 +25,15 @@ int main(int argc, char* argv[]) {
     char countStr [50];
     double scaleFactor = stod(argv[2]);
     double speedFactor = stod(argv[3]);
+    string outFramePath = "";  // parse frames under this folder
 
+    /* Basic info */
+    cout << "OpenCV version " << CV_VERSION << endl;
+    if (string(argv[4]) == "y") {
+        cin >> outFramePath;
+        cout << "writing under " << outFramePath << endl;
+    }
+ 
     /* Read video information */
     VideoCapture targetVid(argv[1]);
     if(!targetVid.isOpened()) {
@@ -50,10 +57,14 @@ int main(int argc, char* argv[]) {
         resize(frame, frame, Size(frameWid * scaleFactor, 
                                   frameHgt * scaleFactor));
     
-        /* display */     
+        /* display */
         sprintf(countStr, "%04d", count);  // padding with zeros
         cout << "frame\t" << countStr << "/" << totalFrame << endl;
         imshow("vid", frame);
+        if (outFramePath.length() != 0) {
+            imwrite(outFramePath + countStr + ".jpg", frame);
+            continue;
+        }
         char key = (char)waitKey(1/vidFPS *  // adjust wait time wrt. FPS
                                      1000 / speedFactor);
         switch (key) {
