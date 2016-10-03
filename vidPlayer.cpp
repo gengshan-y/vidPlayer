@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
     /* Basic info */
     cout << "OpenCV version " << CV_VERSION << endl;
     if (string(argv[4]) == "y") {
+        cout << "to which folder:" << endl;
         cin >> outFramePath;
         cout << "writing under " << outFramePath << endl;
     }
