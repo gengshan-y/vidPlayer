@@ -13,9 +13,8 @@ using namespace cv;
 
 int main(int argc, char* argv[]) {
     /* Basic checking */
-    if (argc != 5) {
-        cout << "vidPlayer input-vid-path scale-up-factor"
-             << " speed-up-factor parse-to-image[y/n]" << endl;
+    if (argc != 2) {
+        cout << "vidPlayer input-video-path " << endl;
         exit(-1);
     }
 
@@ -23,17 +22,13 @@ int main(int argc, char* argv[]) {
     Mat frame;  // to store video frames
     unsigned int count = 0;
     char countStr [50];
-    double scaleFactor = stod(argv[2]);
-    double speedFactor = stod(argv[3]);
+    double scaleFactor;
+    double speedFactor;
+    string ifParse2img;
     string outFramePath = "";  // parse frames under this folder
 
     /* Basic info */
     cout << "OpenCV version " << CV_VERSION << endl;
-    if (string(argv[4]) == "y") {
-        cout << "to which folder:" << endl;
-        cin >> outFramePath;
-        cout << "writing under " << outFramePath << endl;
-    }
  
     /* Read video information */
     VideoCapture targetVid(argv[1]);
@@ -45,8 +40,24 @@ int main(int argc, char* argv[]) {
     unsigned int frameWid = targetVid.get(CV_CAP_PROP_FRAME_WIDTH);
     unsigned int frameHgt = targetVid.get(CV_CAP_PROP_FRAME_HEIGHT);
     double vidFPS = targetVid.get(CV_CAP_PROP_FPS);
+    
+    /* Read user configuration */
+    cout << "scale-up-factor [double]:" << endl;
+    cin >> scaleFactor;
+    
+    cout << "speed-up-factor [double]:" << endl;
+    cin >> speedFactor;
 
-    /* read in and show frames */
+    cout << "parse-to-image [y/n]:" << endl;
+    cin >> ifParse2img;
+    if (ifParse2img == "y") {
+        cout << "to which folder [for example, /home/gengshan/aa will give\
+                 /home/gengshan/aa00001.jpg ...]:" << endl;
+        cin >> outFramePath;
+        cout << "writing under " << outFramePath << endl;
+    }
+
+   /* read in and show frames */
     for(;;) {
         count++;
         targetVid >> frame;
